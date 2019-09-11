@@ -1,0 +1,26 @@
+#team-rubric-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #424242;
+}
+
+#team-rubric-table td, #team-rubric-table th {
+	  border: 1px solid #424242;
+	  padding: 10px 5px;
+}
+
+#team-members {
+	margin: 0 0 20px 0;
+	display: block;
+}
+
+.team-rubric-question {
+	font-size: 1.2em;
+	font-weight: 600;
+	margin-top: 20px;
+}
+
+.self {
+	background-color: lime;
+}
