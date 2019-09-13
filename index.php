@@ -27,7 +27,7 @@ function prefix_load_scripts() {
 
 function team_rubric_build_form($content){
 	global $post;
-	$html = '[gravityform id="1" title="false" description="false"]';
+	$html = '[gravityform id="1" title="false" description="false" ajax="true"]<div id="rubric">';
 	$html .= team_rubric_members();
 	$html .='<div id="table-holder"><table id="team-rubric-table">';
 	$html .= '<tr><th>Name</th><th>Do your part</th><th>Share ideas</th><th>Work towards<br>agreement</th><th>Keep a positive<br>attitude</th><th>Be competent</th></tr>';
@@ -49,14 +49,14 @@ function team_rubric_build_form($content){
 		}
 	
 	}
-	return $html . '</table></div>';
+	return $html . '</table></div></div>';
 }
 
 add_filter( 'the_content', 'team_rubric_build_form' );
 
 function team_rubric_members(){
 	global $post;
-	$members = '<div class="team-rubric-question">Select your name</div><select id="identity">';
+	$members = '<div class="team-rubric-question">Select your name</div><select id="identity" required><option selected disabled value=""></option>';
 	if($post->post_type === 'team'){
 		if( have_rows('members') ){
 			while ( have_rows('members') ) : the_row();
@@ -70,6 +70,10 @@ function team_rubric_members(){
 function team_rubric_rating_maker($id){
 	$list  = '<select id="'.$id.'"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>';
 	return $list;
+}
+
+function team_reporting(){
+
 }
 
 

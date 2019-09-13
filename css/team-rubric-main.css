@@ -26,10 +26,15 @@
 	background-color: lime;
 }
 
+#identity {
+	margin: 10px 0 30px 0;
+}
+
 /*hide gravity form stuff*/
 
 #field_1_1, #field_1_2 {
 	background: red;
+	display: none;
 }
 
 #gform_submit_button_1 {
