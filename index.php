@@ -27,9 +27,9 @@ function prefix_load_scripts() {
 
 function team_rubric_build_form($content){
 	global $post;
-	$html = '';
+	$html = '[gravityform id="1" title="false" description="false"]';
 	$html .= team_rubric_members();
-	$html .='<table id="team-rubric-table">';
+	$html .='<div id="table-holder"><table id="team-rubric-table">';
 	$html .= '<tr><th>Name</th><th>Do your part</th><th>Share ideas</th><th>Work towards<br>agreement</th><th>Keep a positive<br>attitude</th><th>Be competent</th></tr>';
 	if($post->post_type === 'team'){
 		if( have_rows('members') ){
@@ -44,12 +44,12 @@ function team_rubric_build_form($content){
 	        $html .= '<td>' . team_rubric_rating_maker('share-ideas') . '</td>';
 	        $html .= '<td>' . team_rubric_rating_maker('agreement') . '</td>';
 	        $html .= '<td>' . team_rubric_rating_maker('attitude') . '</td>';
-	        $html .= '<td>' . team_rubric_rating_maker('competent') . '</td>';
+	        $html .= '<td>' . team_rubric_rating_maker('competent') . '</td>';	        
 	    endwhile;
 		}
 	
 	}
-	return $html . '</table>';
+	return $html . '</table></div>';
 }
 
 add_filter( 'the_content', 'team_rubric_build_form' );
