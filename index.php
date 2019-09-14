@@ -93,16 +93,31 @@ function team_reporting(){
   $entries = GFAPI::get_entries($form_id, $search_criteria, $sorting, $paging, $total_count );
   $people = [];
   $scores = [];
+  $assignment = [];
   foreach ($entries as $key => $entry) {
          $data = explode ("|", $entry[2]);
          array_push($scores, $data[0]);
-         array_push($people, $data[1]);	         
+         array_push($people, $data[1]);
+         array_push($assignment, $entry[5])	;         
   }
-  var_dump($people);
-     return $people;
+ 	 echo make_charts($people, $scores, $assignment);
+     return $people[0];
 }
 
-
+function make_charts($people, $scores, $assignment){
+	 $unique_assignments = array_unique($assignment);
+     $html = '';
+     var_dump( $unique_assignments);
+     foreach ($unique_assignments as $key => $assignment_base) {
+	   $html .= '<h2>' . $assignment_base . '</h2>';
+	   foreach ($assignment as $a_key => $value) {
+	   		if ($value === $assignment_base){
+	   			$html .= $people[$a_key];
+	   		}
+	   }
+	}
+	return $html;
+}
 
 //ACF JSON SAVER
 add_filter('acf/settings/save_json', 'team_rubric_json_save_point');
