@@ -49,7 +49,7 @@ function team_rubric_build_form($content){
 		}
 	
 	}
-	return $html . '</table></div></div>';
+	return $html . '</table></div></div>' . team_reporting();
 }
 
 add_filter( 'the_content', 'team_rubric_build_form' );
@@ -73,7 +73,33 @@ function team_rubric_rating_maker($id){
 }
 
 function team_reporting(){
+	global $post;
+	$team = get_the_title($post->ID);
+	$search_criteria = array(
+    	'status'        => 'active',
+    	 'field_filters' => array(
+	        'mode' => 'any',
+	        array(
+	            'key'   => '6',
+	            'value' => $team
+	        )
+	    )
+	);
+  $form_id = 1;
+  $sorting         = array();
+  $paging          = array( 'offset' => 0, 'page_size' => 200);
+  $total_count     = 0;
 
+  $entries = GFAPI::get_entries($form_id, $search_criteria, $sorting, $paging, $total_count );
+  $people = [];
+  $scores = [];
+  foreach ($entries as $key => $entry) {
+         $data = explode ("|", $entry[2]);
+         array_push($scores, $data[0]);
+         array_push($people, $data[1]);	         
+  }
+  var_dump($people);
+     return $people;
 }
 
 
