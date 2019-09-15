@@ -22,13 +22,13 @@ if (document.querySelectorAll('.single-team')){
 		parent.classList.add('self');
 		document.getElementById('input_1_1').value = identity.value;//set gravity form student value
 	}
-
 	let scores = document.querySelectorAll('#team-rubric-table select')
 	console.log(scores)
 
 	scores.forEach((score) => {
 	  score.addEventListener('change', () => {
-	    gform_scores.value =  mergeElements(teamMembers(), scoreKeeper(scores) );//write all the scores in
+	  	let assignment = document.getElementById('input_1_5').value;
+	    gform_scores.value =  mergeElements(teamMembers(), scoreKeeper(scores), assignment );//write all the scores in
 	  });
 	});
 
@@ -51,12 +51,13 @@ if (document.querySelectorAll('.single-team')){
 		return allMembers;
 	}
 
-  function mergeElements(members, scores){
+  function mergeElements(members, scores, assignment){
     let json = [];
     let count = 0;
     members.forEach(function(memb){
       let stu = {};
-      console.log(memb)
+      console.log(memb);
+      stu['assignment'] = assignment;
       stu['student'] = memb;
       stu['scores'] = scores.slice(count, count+5);
       console.log(count)

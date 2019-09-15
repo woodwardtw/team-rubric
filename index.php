@@ -86,7 +86,7 @@ function team_reporting(){
 	    )
 	);
   $form_id = 1;
-  $sorting         = array();
+  $sorting = array( 'key' => 5, 'direction' => 'ASC', 'is_numeric' => false );  
   $paging          = array( 'offset' => 0, 'page_size' => 200);
   $total_count     = 0;
 
@@ -95,13 +95,11 @@ function team_reporting(){
   $scores = [];
   $assignment = [];
   foreach ($entries as $key => $entry) {
-         $data = explode ("|", $entry[2]);
-         array_push($scores, $data[0]);
-         array_push($people, $data[1]);
-         array_push($assignment, $entry[5])	;         
+  		array_push($assignment, $entry[5]);
+        print("<pre>".print_r($entry[5],true)."</pre>"); 
+        print("<pre>".print_r($entry[2],true)."</pre>"); 
   }
  	 echo make_charts($people, $scores, $assignment);
-     return $people[0];
 }
 
 function make_charts($people, $scores, $assignment){
@@ -112,7 +110,7 @@ function make_charts($people, $scores, $assignment){
 	   $html .= '<h2>' . $assignment_base . '</h2>';
 	   foreach ($assignment as $a_key => $value) {
 	   		if ($value === $assignment_base){
-	   			$html .= $people[$a_key];
+	   			//$html .= $people[$a_key];
 	   		}
 	   }
 	}
