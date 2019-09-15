@@ -28,7 +28,7 @@ if (document.querySelectorAll('.single-team')){
 
 	scores.forEach((score) => {
 	  score.addEventListener('change', () => {
-	    gform_scores.value = scoreKeeper(scores) + teamMembers();//write all the scores in
+	    gform_scores.value =  mergeElements(teamMembers(), scoreKeeper(scores) );//write all the scores in
 	  });
 	});
 
@@ -38,19 +38,35 @@ if (document.querySelectorAll('.single-team')){
 		scores.forEach((score) => {
 		  allScores.push(score.value)
 		});
-		return '['+allScores+']';
+    console.log(allScores.length)
+		return allScores;
 	}
 
 	function teamMembers(){
 		allMembers = [];
 		let members = document.querySelectorAll('tr td:first-child');
 		members.forEach((member) => {
-		  allMembers.push("'"+member.innerHTML+"'")
+		  allMembers.push(member.innerHTML)
 		});
-		return '|['+allMembers+']';
-
+		return allMembers;
 	}
 
+  function mergeElements(members, scores){
+    let json = [];
+    let count = 0;
+    members.forEach(function(memb){
+      let stu = {};
+      console.log(memb)
+      stu['student'] = memb;
+      stu['scores'] = scores.slice(count, count+5);
+      console.log(count)
+      count = count + 5;
+      json.push(stu);
+    })
+    console.log(json)
+    return JSON.stringify(json);
+  }
+  
 	//#input_1_1 - student name
 	//#input_1_2 - assessment
 

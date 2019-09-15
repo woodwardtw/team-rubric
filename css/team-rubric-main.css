@@ -34,7 +34,7 @@
 
 #field_1_1, #field_1_2 {
 	background: red;
-	display: none;
+	/*display: none;*/
 }
 
 #gform_submit_button_1 {
