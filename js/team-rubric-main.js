@@ -11,11 +11,16 @@ if (document.querySelectorAll('.single-team')){
 	function idSet(){
 		let user = document.getElementById(identity.value);
 		let parent = document.getElementById(identity.value).parentNode;
+		let name = user.innerHTML;
+		console.log(name)
+		console.log(name.length)
 		if (document.querySelectorAll(".self")[0]){
 			let oldSelf = document.querySelectorAll(".self")[0];
+			let oldName = document.querySelectorAll(".self")[0].firstChild;
+			let end = (oldName.innerHTML.length)-6;
+			//oldName.innerHTML.slice(0,end)
+		    oldName.innerHTML = oldName.innerHTML.slice(0,end);//remove self if name changes
 	   	 	oldSelf.classList.remove("self");
-	   	 	let name = oldSelf.innerHTML;
-	   	 	oldSelf.innerHTML = oldSelf.innerHTML.slice(0,(name.length-6));//remove self if name changes
 		}
 
 		user.innerHTML = user.innerHTML + ' (you)';
@@ -23,7 +28,6 @@ if (document.querySelectorAll('.single-team')){
 		document.getElementById('input_1_1').value = identity.value;//set gravity form student value
 	}
 	let scores = document.querySelectorAll('#team-rubric-table select')
-	console.log(scores)
 
 	scores.forEach((score) => {
 	  score.addEventListener('change', () => {
@@ -38,7 +42,6 @@ if (document.querySelectorAll('.single-team')){
 		scores.forEach((score) => {
 		  allScores.push(score.value)
 		});
-    console.log(allScores.length)
 		return allScores;
 	}
 
@@ -74,7 +77,41 @@ if (document.querySelectorAll('.single-team')){
 
 	jQuery(document).bind('gform_confirmation_loaded', function(event, formId){
 	    // code to be trigger when confirmation page is loaded
-	    console.log('form ok and submitted')
+	   console.log('form ok and submitted')
 	   document.getElementById('rubric').classList.add('hidden');
 	});
+}
+
+//SCRIPT TO BUILD THE TABLES AND FILL THEM WITH DATA
+data.forEach(function(item){
+  let theAssignment = item.assignment;
+  let cleanAssignment = cleanWords(theAssignment);
+  addContent(cleanAssignment, item.student, item.scores)
+})
+
+function addContent(assignment, student, stats){
+  let holder = document.getElementById(assignment)
+  let destination = holder.getElementsByClassName(cleanWords(student)+'-data')[0];
+  let row = destination.insertRow();
+  row.innerHTML = '<td>' +student + '</td>'+ cleanStats(stats);
+
+}
+
+
+function cleanWords(words){
+ if(words.includes(' ')){
+   	words = words.split(' ').join('-');
+	}
+  if (words.includes("-(you)")){
+      words = words.substr(0, (words.length-6))
+      }
+  return words.toLowerCase();
+}
+
+function cleanStats(stats){
+  let clean = '';
+  stats.forEach(function(record){
+   clean += '<td>' + record + '</td>'
+  })
+  return clean;
 }

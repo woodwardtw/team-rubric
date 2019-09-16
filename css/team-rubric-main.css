@@ -1,4 +1,4 @@
-#team-rubric-table {
+#team-rubric-table, .rubric-table {
   table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
@@ -6,7 +6,7 @@
   margin: 0 0 30px 0;
 }
 
-#team-rubric-table td, #team-rubric-table th {
+#team-rubric-table td, #team-rubric-table th, .rubric-table td, .rubric-table th {
 	  border: 1px solid #424242;
 	  padding: 10px 5px;
 }

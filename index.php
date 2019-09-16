@@ -91,30 +91,57 @@ function team_reporting(){
   $total_count     = 0;
 
   $entries = GFAPI::get_entries($form_id, $search_criteria, $sorting, $paging, $total_count );
-  $people = [];
-  $scores = [];
+  $people = getTeam();
+  $scores = '';
   $assignment = [];
   foreach ($entries as $key => $entry) {
   		array_push($assignment, $entry[5]);
-        print("<pre>".print_r($entry[5],true)."</pre>"); 
-        print("<pre>".print_r($entry[2],true)."</pre>"); 
+  		//array_push($people, $entry[1]);
+  		$score = substr($entry[2], 1, -1);
+  		$scores .= $score . ',';
+        //print("<pre>".print_r($scores,true)."</pre>"); 
+        //print("<pre>".print_r($entry,true)."</pre>"); 
   }
  	 echo make_charts($people, $scores, $assignment);
+ 	 echo '<script> const data = [' . $scores . ']</script>'; 
 }
 
 function make_charts($people, $scores, $assignment){
 	 $unique_assignments = array_unique($assignment);
      $html = '';
-     var_dump( $unique_assignments);
      foreach ($unique_assignments as $key => $assignment_base) {
+	   $html .= '<div id="' . sanitize_title($assignment_base) . '">';
 	   $html .= '<h2>' . $assignment_base . '</h2>';
-	   foreach ($assignment as $a_key => $value) {
-	   		if ($value === $assignment_base){
-	   			//$html .= $people[$a_key];
-	   		}
-	   }
+	   $html .= tableMaker($people);
+	   // foreach ($assignment as $a_key => $value) {
+	   // 		if ($value === $assignment_base){
+	   // 			//$html .= tableMaker($people);
+	   // 		}
+	   // }
 	}
-	return $html;
+	return $html . '</div>';
+}
+
+function tableMaker($people){
+	$unique_people = array_unique($people);
+	$table = '';
+	 foreach ($unique_people as $key => $person) {
+	 	$table .= '<table class="'. $person .'-data rubric-table">';
+	 	$table .= '<tr><th>Name</th><th>Do your part</th><th>Share ideas</th><th>Work towards<br>agreement</th><th>Keep a positive<br>attitude</th><th>Be competent</th></tr>';
+	 }
+	 return $table . '</table>';
+}
+
+function getTeam(){
+	global $post;
+	$members = [];
+	if( have_rows('members') ){
+			while ( have_rows('members') ) : the_row();
+				$name = sanitize_title(get_sub_field('member_name'));
+				array_push($members,$name);
+			endwhile;
+		}
+	return $members;
 }
 
 //ACF JSON SAVER
