@@ -116,30 +116,36 @@ function averageScores(){
 		let attitude = [];
 		let competent = [];
 		for (i = 0; i < rowCount; i++) {
-		  if (i === 0 || i === rowCount-1){		  	
+		  let selfCheck = table.rows[i].cells.item(0).innerHTML;
+		  console.log(selfCheck)
+		  if (i === 0 || selfCheck.includes(' (you)')){		  	
 		  } else {
-		  	yourPart.push(table.rows[i].cells.item(1).innerHTML)
-		  	shareIdeas.push(table.rows[i].cells.item(2).innerHTML)
-		  	workAgree.push(table.rows[i].cells.item(3).innerHTML)
-		    attitude.push(table.rows[i].cells.item(4).innerHTML)
-		  	competent.push(table.rows[i].cells.item(5).innerHTML)		    		  
+		  	yourPart.push(parseInt(table.rows[i].cells.item(1).innerHTML))
+		  	shareIdeas.push(parseInt(table.rows[i].cells.item(2).innerHTML))
+		  	workAgree.push(parseInt(table.rows[i].cells.item(3).innerHTML))
+		    attitude.push(parseInt(table.rows[i].cells.item(4).innerHTML))
+		  	competent.push(parseInt(table.rows[i].cells.item(5).innerHTML))		    		  
 		  }		  
 		}
-		let avgPart = doAverageMath(yourPart);
-		let avgIdeas = doAverageMath(shareIdeas);
-		let avgWork = doAverageMath(workAgree);
-		let avgAttitude = doAverageMath(attitude);
-		let avgCompetent = doAverageMath(competent);
+		let avgPart = doAverageMath(yourPart).toFixed(2);
+		let avgIdeas = doAverageMath(shareIdeas).toFixed(2);
+		let avgWork = doAverageMath(workAgree).toFixed(2);
+		let avgAttitude = doAverageMath(attitude).toFixed(2);
+		let avgCompetent = doAverageMath(competent).toFixed(2);
 		let avgRow = table.insertRow(-1);
-		avgRow.innerHTML = '<td>Average</td><td>' + avgPart + '</td><td>' + avgIdeas + '</td><td>' + avgWork + '</td><td>' + avgAttitude + '</td><td>' + avgCompetent + '</td>' 
+		avgRow.className = 'rubric-average';
+		avgRow.innerHTML = '<td>Group Average (excluding self rating)</td><td>' + avgPart + '</td><td>' + avgIdeas + '</td><td>' + avgWork + '</td><td>' + avgAttitude + '</td><td>' + avgCompetent + '</td>' 
 	})
 }
 
 
 function doAverageMath(scores){
 	if (scores.length){
-	    sum = scores.reduce(function(a, b) { return a + b; });
-	    avg = sum / scores.length;
+	    var total = 0;
+		for(var i = 0; i < scores.length; i++) {
+		    total += scores[i];
+		}
+		var avg = total / scores.length;
 	}
 	return avg;
 

@@ -43,3 +43,8 @@
 	width: 100%;
 	display: block;
 }
+
+.rubric-average {
+	font-weight: 600;
+	background-color: #efefef;
+}
