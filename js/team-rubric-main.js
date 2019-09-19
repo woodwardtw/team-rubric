@@ -83,20 +83,65 @@ if (document.querySelectorAll('.single-team')){
 }
 
 //SCRIPT TO BUILD THE TABLES AND FILL THEM WITH DATA
-data.forEach(function(item){
-  let theAssignment = item.assignment;
-  let cleanAssignment = wpFeSanitizeTitle(theAssignment);
-  addContent(cleanAssignment, item.student, item.scores)
-})
+buildTables(data, averageScores);
+function buildTables(data){
+	data.forEach(function(item){
+	  let theAssignment = item.assignment;
+	  let cleanAssignment = wpFeSanitizeTitle(theAssignment);
+	  addContent(cleanAssignment, item.student, item.scores)
+	})
+	averageScores()
+}
 
 function addContent(assignment, student, stats){
   let holder = document.getElementById(assignment)
-  console.log(holder)
   studentClean = cleanWords(student);
-  console.log(student)
   let destination = holder.getElementsByClassName(wpFeSanitizeTitle(studentClean)+'-data')[0];
-  let row = destination.insertRow();
+  let line = 1;
+  if (student.includes(" (you)")){
+  	line = -1;//make the self rating the bottom rating
+  } 
+  let row = destination.insertRow(line);
   row.innerHTML = '<td>' +student + '</td>'+ cleanStats(stats);
+}
+
+function averageScores(){
+	let allTables = document.querySelectorAll('.rubric-table')
+	allTables.forEach(function(table){
+		let rows = table.rows;
+		let rowCount = rows.length;
+		let yourPart = [];
+		let shareIdeas = [];
+		let workAgree = [];
+		let attitude = [];
+		let competent = [];
+		for (i = 0; i < rowCount; i++) {
+		  if (i === 0 || i === rowCount-1){		  	
+		  } else {
+		  	yourPart.push(table.rows[i].cells.item(1).innerHTML)
+		  	shareIdeas.push(table.rows[i].cells.item(2).innerHTML)
+		  	workAgree.push(table.rows[i].cells.item(3).innerHTML)
+		    attitude.push(table.rows[i].cells.item(4).innerHTML)
+		  	competent.push(table.rows[i].cells.item(5).innerHTML)		    		  
+		  }		  
+		}
+		let avgPart = doAverageMath(yourPart);
+		let avgIdeas = doAverageMath(shareIdeas);
+		let avgWork = doAverageMath(workAgree);
+		let avgAttitude = doAverageMath(attitude);
+		let avgCompetent = doAverageMath(competent);
+		let avgRow = table.insertRow(-1);
+		avgRow.innerHTML = '<td>Average</td><td>' + avgPart + '</td><td>' + avgIdeas + '</td><td>' + avgWork + '</td><td>' + avgAttitude + '</td><td>' + avgCompetent + '</td>' 
+	})
+}
+
+
+function doAverageMath(scores){
+	if (scores.length){
+	    sum = scores.reduce(function(a, b) { return a + b; });
+	    avg = sum / scores.length;
+	}
+	return avg;
 
 }
 
