@@ -73,37 +73,39 @@ function team_rubric_rating_maker($id){
 }
 
 function team_reporting(){
-	global $post;
-	$team = get_the_title($post->ID);
-	$search_criteria = array(
-    	'status'        => 'active',
-    	 'field_filters' => array(
-	        'mode' => 'any',
-	        array(
-	            'key'   => '6',
-	            'value' => $team
-	        )
-	    )
-	);
-  $form_id = 1;
-  $sorting = array( 'key' => 5, 'direction' => 'ASC', 'is_numeric' => false );  
-  $paging          = array( 'offset' => 0, 'page_size' => 200);
-  $total_count     = 0;
+	if(current_user_can('administrator')){
+		global $post;
+		$team = get_the_title($post->ID);
+		$search_criteria = array(
+	    	'status'        => 'active',
+	    	 'field_filters' => array(
+		        'mode' => 'any',
+		        array(
+		            'key'   => '6',
+		            'value' => $team
+		        )
+		    )
+		);
+	  $form_id = 1;
+	  $sorting = array( 'key' => 5, 'direction' => 'ASC', 'is_numeric' => false );  
+	  $paging          = array( 'offset' => 0, 'page_size' => 200);
+	  $total_count     = 0;
 
-  $entries = GFAPI::get_entries($form_id, $search_criteria, $sorting, $paging, $total_count );
-  $people = getTeam();
-  $scores = '';
-  $assignment = [];
-  foreach ($entries as $key => $entry) {
-  		array_push($assignment, $entry[5]);
-  		//array_push($people, $entry[1]);
-  		$score = substr($entry[2], 1, -1);
-  		$scores .= $score . ',';
-        //print("<pre>".print_r($scores,true)."</pre>"); 
-        //print("<pre>".print_r($entry,true)."</pre>"); 
-  }
- 	 echo make_charts($people, $scores, $assignment);
- 	 echo '<script> const data = [' . $scores . ']</script>'; 
+	  $entries = GFAPI::get_entries($form_id, $search_criteria, $sorting, $paging, $total_count );
+	  $people = getTeam();
+	  $scores = '';
+	  $assignment = [];
+	  foreach ($entries as $key => $entry) {
+	  		array_push($assignment, $entry[5]);
+	  		//array_push($people, $entry[1]);
+	  		$score = substr($entry[2], 1, -1);
+	  		$scores .= $score . ',';
+	        //print("<pre>".print_r($scores,true)."</pre>"); 
+	        //print("<pre>".print_r($entry,true)."</pre>"); 
+	  }
+	 	 echo make_charts($people, $scores, $assignment);
+	 	 echo '<script> const data = [' . $scores . ']</script>'; 
+		}	
 }
 
 function make_charts($people, $scores, $assignment){
