@@ -12,8 +12,8 @@ if (document.querySelectorAll('.single-team')){
 		let user = document.getElementById(identity.value);
 		let parent = document.getElementById(identity.value).parentNode;
 		let name = user.innerHTML;
-		console.log(name)
-		console.log(name.length)
+		//console.log(name)
+		//console.log(name.length)
 		if (document.querySelectorAll(".self")[0]){
 			let oldSelf = document.querySelectorAll(".self")[0];
 			let oldName = document.querySelectorAll(".self")[0].firstChild;
@@ -59,15 +59,15 @@ if (document.querySelectorAll('.single-team')){
     let count = 0;
     members.forEach(function(memb){
       let stu = {};
-      console.log(memb);
+      //console.log(memb);
       stu['assignment'] = assignment;
       stu['student'] = memb;
       stu['scores'] = scores.slice(count, count+5);
-      console.log(count)
+      //console.log(count)
       count = count + 5;
       json.push(stu);
     })
-    console.log(json)
+    //console.log(json)
     return JSON.stringify(json);
   }
   
@@ -77,7 +77,7 @@ if (document.querySelectorAll('.single-team')){
 
 	jQuery(document).bind('gform_confirmation_loaded', function(event, formId){
 	    // code to be trigger when confirmation page is loaded
-	   console.log('form ok and submitted')
+	   //console.log('form ok and submitted')
 	   document.getElementById('rubric').classList.add('hidden');
 	});
 }
@@ -115,16 +115,25 @@ function averageScores(){
 		let workAgree = [];
 		let attitude = [];
 		let competent = [];
+		let selfYourPart = [];
+		let selfShareIdeas = [];
+		let selfWorkAgree = [];
+		let selfAttitude = [];
+		let selfCompetent = [];
 		for (i = 0; i < rowCount; i++) {
 		  let selfCheck = table.rows[i].cells.item(0).innerHTML;
-		  console.log(selfCheck)
-		  if (i === 0 || selfCheck.includes(' (you)')){		  	
-		  } else {
-		  	yourPart.push(parseInt(table.rows[i].cells.item(1).innerHTML))
-		  	shareIdeas.push(parseInt(table.rows[i].cells.item(2).innerHTML))
-		  	workAgree.push(parseInt(table.rows[i].cells.item(3).innerHTML))
-		    attitude.push(parseInt(table.rows[i].cells.item(4).innerHTML))
-		  	competent.push(parseInt(table.rows[i].cells.item(5).innerHTML))		    		  
+		  if ( selfCheck.includes(' (you)')){	
+				 selfYourPart.push(parseInt(table.rows[i].cells.item(1).innerHTML))
+				 selfShareIdeas.push(parseInt(table.rows[i].cells.item(2).innerHTML))
+				 selfWorkAgree.push(parseInt(table.rows[i].cells.item(3).innerHTML))
+				 selfAttitude.push(parseInt(table.rows[i].cells.item(4).innerHTML))
+				 selfCompetent.push(parseInt(table.rows[i].cells.item(5).innerHTML))
+		  } if (i != 0 && selfCheck.includes(' (you)') === false) {
+			  	yourPart.push(parseInt(table.rows[i].cells.item(1).innerHTML))
+			  	shareIdeas.push(parseInt(table.rows[i].cells.item(2).innerHTML))
+			  	workAgree.push(parseInt(table.rows[i].cells.item(3).innerHTML))
+			    attitude.push(parseInt(table.rows[i].cells.item(4).innerHTML))
+			  	competent.push(parseInt(table.rows[i].cells.item(5).innerHTML))		    		  
 		  }		  
 		}
 		let avgPart = doAverageMath(yourPart).toFixed(2);
@@ -135,7 +144,19 @@ function averageScores(){
 		let avgRow = table.insertRow(-1);
 		avgRow.className = 'rubric-average';
 		avgRow.innerHTML = '<td>Group Average (excluding self rating)</td><td>' + avgPart + '</td><td>' + avgIdeas + '</td><td>' + avgWork + '</td><td>' + avgAttitude + '</td><td>' + avgCompetent + '</td>' 
+		//full average
+		let avgPartAll = doAverageMath(yourPart.concat(selfYourPart)).toFixed(2);
+		let avgIdeasAll = doAverageMath(shareIdeas.concat(selfShareIdeas)).toFixed(2);
+		let avgWorkAll = doAverageMath(workAgree.concat(selfWorkAgree)).toFixed(2);
+		let avgAttitudeAll = doAverageMath(attitude.concat(selfAttitude)).toFixed(2);
+		let avgCompetentAll = doAverageMath(competent.concat(selfCompetent)).toFixed(2);
+		let avgRowAll = table.insertRow(-1);
+		avgRowAll.className = 'rubric-average all';
+		avgRowAll.innerHTML = '<td>Group Average (including self rating)</td><td>' + avgPartAll + '</td><td>' + avgIdeasAll + '</td><td>' + avgWorkAll + '</td><td>' + avgAttitudeAll + '</td><td>' + avgCompetentAll + '</td>' 
+
+
 	})
+
 }
 
 
