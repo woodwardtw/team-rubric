@@ -72,9 +72,25 @@ function team_rubric_rating_maker($id){
 	return $list;
 }
 
+function team_rubric_members_submitted(){
+	global $post;
+	$members = '<div id="team-rubric-submitted">';
+	if($post->post_type === 'team'){
+		if( have_rows('members') ){
+			while ( have_rows('members') ) : the_row();
+				$members .= '<div id="' . sanitize_title(get_sub_field('member_name')) . '-check">' . get_sub_field('member_name') . '</div>';
+			endwhile;
+		}
+	}
+	return $members . '</div>';
+}
+
+
+
 function team_reporting(){
 	if(current_user_can('administrator')){
 		global $post;
+		echo team_rubric_members_submitted();
 		$team = get_the_title($post->ID);
 		$search_criteria = array(
 	    	'status'        => 'active',

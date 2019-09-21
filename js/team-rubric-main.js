@@ -100,9 +100,13 @@ function addContent(assignment, student, stats){
   let line = 1;
   if (student.includes(" (you)")){
   	line = -1;//make the self rating the bottom rating
+  	var theClass = 'self-rating'
   } 
   let row = destination.insertRow(line);
   row.innerHTML = '<td>' +student + '</td>'+ cleanStats(stats);
+  if (theClass){
+  	row.cells.item(0).classList = theClass
+  }
 }
 
 function averageScores(){
@@ -154,9 +158,8 @@ function averageScores(){
 		avgRowAll.className = 'rubric-average all';
 		avgRowAll.innerHTML = '<td>Group Average (including self rating)</td><td>' + avgPartAll + '</td><td>' + avgIdeasAll + '</td><td>' + avgWorkAll + '</td><td>' + avgAttitudeAll + '</td><td>' + avgCompetentAll + '</td>' 
 
-
 	})
-
+		turnInCheck()
 }
 
 
@@ -186,6 +189,18 @@ function cleanStats(stats){
    clean += '<td>' + record + '</td>'
   })
   return clean;
+}
+
+function turnInCheck(){
+	let students = document.getElementById('team-rubric-submitted')
+	let submitted = document.querySelectorAll('.self-rating')
+	submitted.forEach(function(stu){
+		let name = stu.innerHTML
+		let cleanName = wpFeSanitizeTitle(name.slice(0, name.length-6)) + '-check'
+		if (students.querySelectorAll('#'+cleanName)){
+			document.getElementById(cleanName).classList = 'rated'
+		}
+	})
 }
 
 /**

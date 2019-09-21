@@ -30,6 +30,24 @@
 	margin: 10px 0 30px 0;
 }
 
+/*check off submitted people*/
+#team-rubric-submitted {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#team-rubric-submitted div {
+	width: 200px;
+	border: 1px solid;
+	text-align: center;
+	margin: 5px 7px;
+}
+
+#team-rubric-submitted .rated {
+	background-color: lime;
+}
+
+
 /*hide gravity form stuff*/
 
 #field_1_1, #field_1_2 {
@@ -48,3 +66,4 @@
 	font-weight: 600;
 	background-color: #efefef;
 }
+
