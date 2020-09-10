@@ -1,8 +1,8 @@
 <?php 
 /*
-Plugin Name: Team Rubric Helpter 
+Plugin Name: Team Rubric Helper 
 Plugin URI:  https://github.com/
-Description: Relies on ACF and Gravity Forms
+Description: Relies on ACF Pro and Gravity Forms
 Version:     1.0
 Author:      Tom Woodward
 Author URI:  http://bionicteaching.com
@@ -27,7 +27,8 @@ function prefix_load_scripts() {
 
 function team_rubric_build_form($content){
 	global $post;
-	$html = '[gravityform id="1" title="false" description="false" ajax="true"]<div id="rubric">';
+	if (get_post_type($post->ID) === 'team'){
+		$html = '[gravityform id="1" title="false" description="false" ajax="true"]<div id="rubric">';
 	$html .= team_rubric_members();
 	$html .='<div id="table-holder"><table id="team-rubric-table">';
 	$html .= '<tr><th>Name</th><th>Do your part</th><th>Share ideas</th><th>Work towards<br>agreement</th><th>Keep a positive<br>attitude</th><th>Be competent</th></tr>';
@@ -49,7 +50,12 @@ function team_rubric_build_form($content){
 		}
 	
 	}
-	return $html . '</table></div></div>' . team_reporting();
+		return $html . '</table></div></div>' . team_reporting() . $content;
+	} 
+	else {
+		return $content;
+	}
+	
 }
 
 add_filter( 'the_content', 'team_rubric_build_form' );
@@ -259,3 +265,80 @@ function create_team_cpt() {
   $wp_rewrite->flush_rules();
 }
 add_action( 'init', 'create_team_cpt', 0 );
+
+if( function_exists('acf_add_local_field_group') ):
+
+acf_add_local_field_group(array(
+	'key' => 'group_5d7837958d986',
+	'title' => 'Team Members',
+	'fields' => array(
+		array(
+			'key' => 'field_5d78379b3b478',
+			'label' => 'Members',
+			'name' => 'members',
+			'type' => 'repeater',
+			'instructions' => 'Enter team member name below.',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array(
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'collapsed' => '',
+			'min' => 0,
+			'max' => 0,
+			'layout' => 'table',
+			'button_label' => 'Add team member',
+			'sub_fields' => array(
+				array(
+					'key' => 'field_5d78381d0a34f',
+					'label' => 'Member Name',
+					'name' => 'member_name',
+					'type' => 'text',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'default_value' => '',
+					'placeholder' => '',
+					'prepend' => '',
+					'append' => '',
+					'maxlength' => '',
+				),
+			),
+		),
+	),
+	'location' => array(
+		array(
+			array(
+				'param' => 'post_type',
+				'operator' => '==',
+				'value' => 'team',
+			),
+		),
+	),
+	'menu_order' => 0,
+	'position' => 'normal',
+	'style' => 'default',
+	'label_placement' => 'top',
+	'instruction_placement' => 'label',
+	'hide_on_screen' => array(
+		0 => 'the_content',
+		1 => 'excerpt',
+		2 => 'discussion',
+		3 => 'comments',
+		4 => 'format',
+		5 => 'page_attributes',
+		6 => 'featured_image',
+		7 => 'send-trackbacks',
+	),
+	'active' => true,
+	'description' => '',
+));
+
+endif;
