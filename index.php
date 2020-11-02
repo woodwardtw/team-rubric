@@ -200,6 +200,8 @@ function team_rubric_json_load_point( $paths ) {
 
 
 
+
+
 //team custom post type
 
 // Register Custom Post Type team

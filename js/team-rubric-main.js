@@ -31,6 +31,10 @@ if (document.querySelectorAll('.single-team')){
 
 	scores.forEach((score) => {
 	  score.addEventListener('change', () => {
+	  	if(!identity.value){
+	  		alert('Please indicate your name before rating.')
+	  	}
+	  	console.log(identity.value)
 	  	let assignment = document.getElementById('input_1_5').value;
 	    gform_scores.value =  mergeElements(teamMembers(), scoreKeeper(scores), assignment );//write all the scores in
 	  });
@@ -164,12 +168,13 @@ function averageScores(){
 
 
 function doAverageMath(scores){
+	var avg = 0;
 	if (scores.length){
 	    var total = 0;
 		for(var i = 0; i < scores.length; i++) {
 		    total += scores[i];
 		}
-		var avg = total / scores.length;
+		avg = total / scores.length;
 	}
 	return avg;
 
