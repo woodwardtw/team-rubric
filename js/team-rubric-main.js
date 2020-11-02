@@ -32,7 +32,8 @@ if (document.querySelectorAll('.single-team')){
 	scores.forEach((score) => {
 	  score.addEventListener('change', () => {
 	  	if(!identity.value){
-	  		alert('Please indicate your name before rating.')
+	  		alert('Please indicate your name before rating.');
+	  		location.reload();
 	  	}
 	  	console.log(identity.value)
 	  	let assignment = document.getElementById('input_1_5').value;
